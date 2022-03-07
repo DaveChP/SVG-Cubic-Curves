@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SVG Curves</title>
+
+<style>
+body {
+  font-family: sans-serif;
+}
+svg {
+  background-color: #ffffff;
+}
+</style>
+
+</head>
+
+<body>
+
+
+<svg version="1.1" width="800" height="400" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
+
+  <g id="grid" fill="none" stroke="black" stroke-width="0.05">
+  <path id="vertical-grid" d="M0.1 0 v50 m10 0 v-50 m10 0 v50 m10 0 v-50 m10 0 v50 m10 0 v-50 m10 0 v50 m10 0 v-50 m10 0 v50 m10 0 v-50 m9.8 0 v50"/>
+  <path id="horizontal-grid"d="M0 0.1 h100 m0 10 h-100 m0 10 h100 m0 10 h-100 m0 10 h100 m0 9.8 h-100"/>
+  </g>
+
+  <g id="axis-labels" font-size="2" fill="black">
+    <g id="x-Labels" text-anchor="left">
+    <text x="0" y="2">0</text>
+    <text x="10" y="2">10</text>
+    <text x="20" y="2">20</text>
+    <text x="30" y="2">30</text>
+    <text x="40" y="2">40</text>
+    <text x="50" y="2">50</text>
+    <text x="60" y="2">60</text>
+    <text x="70" y="2">70</text>
+    <text x="80" y="2">80</text>
+    <text x="90" y="2">90</text>
+    <text x="100" y="2">100</text>
+    </g>
+    <g id="y-labels" text-anchor="left">
+    <text x="0" y="10">10</text>
+    <text x="0" y="20">20</text>
+    <text x="0" y="30">30</text>
+    <text x="0" y="40">40</text>
+    <text x="0" y="50">50</text>
+    </g>
+  </g>
+  
+  <g id="points" fill="blue" stroke="none" font-size="2" text-anchor="middle">
+  <path d="M10 10 h10" stroke="red" stroke-width="0.2"/>
+  <path d="M10 20 h10" stroke="red" stroke-width="0.2"/>
+  <circle cx="10" cy="10" r="0.5"/>
+  <text x="10" y="9" fill="red">10,10</text>
+  <circle cx="10" cy="20" r="0.5"/>
+  <text x="10" y="19" fill="red">10,20</text>
+  <circle cx="20" cy="10" r="0.5"/>
+  <text x="20" y="9" fill="red">20,10</text>
+  <circle cx="20" cy="20" r="0.5"/>
+  <text x="20" y="19" fill="red">20,20</text>
+  <path stroke="green" stroke-width="0.2" d="M10 10 C20 10 20 20 10 20/>
+  </g>
+
+<!--
+<path  stroke="#000000" stroke-width="1" fill="none" d="M300 100 C400 120, 500 300, 200 200" />
+-->
+
+</svg>
+
+</body>
+</html>
