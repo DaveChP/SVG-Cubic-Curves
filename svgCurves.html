@@ -7,17 +7,28 @@
 <style>
 body {
   font-family: sans-serif;
+  padding: 0px;
+  margin: 0;
 }
 svg {
+  position: absolute;
+  left: 50px;
+  top: 30px;
   background-color: #ffffff;
 }
+#svg-frame {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
 </style>
 
 </head>
 
 <body>
 
-
+<div id="svg-frame">
 <svg version="1.1" width="800" height="400" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
 
   <g id="grid" fill="none" stroke="black" stroke-width="0.05">
@@ -50,16 +61,16 @@ svg {
   
   <g id="points" fill="blue" stroke="none" font-size="2" text-anchor="middle">
   <path d="M10 10 h10" stroke="red" stroke-width="0.2"/>
-  <path d="M10 20 h10" stroke="red" stroke-width="0.2"/>
+  <path d="M10 20 20 20" stroke="red" stroke-width="0.2"/>
   <circle cx="10" cy="10" r="0.5"/>
   <text x="10" y="9" fill="red">10,10</text>
   <circle cx="10" cy="20" r="0.5"/>
   <text x="10" y="19" fill="red">10,20</text>
   <circle cx="20" cy="10" r="0.5"/>
   <text x="20" y="9" fill="red">20,10</text>
-  <circle cx="20" cy="20" r="0.5"/>
-  <text x="20" y="19" fill="red">20,20</text>
-  <path stroke="green" stroke-width="0.2" d="M10 10 C20 10 20 20 10 20/>
+  <circle id="handle" cx="20" cy="20" r="0.5"/>
+  <text x="20" y="19" fill="red">20, 20</text>
+  <path stroke="green" stroke-width="0.2" d="M10 10 C20 10 20 20 10 20" fill="none"/>
   </g>
 
 <!--
@@ -67,6 +78,34 @@ svg {
 -->
 
 </svg>
+</div>
+<script>
+let down=false;
+
+document.getElementById('svg-frame').addEventListener('mousedown', event => {
+console.log(event.clientX);
+down=true; 
+//outerHTML = `<circle id="handle" cx="${event.clientX*8 + 50}" cy="${event.clientY*8 + 30}" r="0.5"/>`
+});
+
+document.getElementById('svg-frame').addEventListener('mousemove', event => {
+   if (down) {
+   X = parseInt(event.clientX/8 - 6);
+   Y = parseInt(event.clientY/8 -3.8);
+   document.getElementById('points').getElementsByTagName('circle')[3].setAttribute('cx', `${event.clientX/8 - 6}`);
+   document.getElementById('points').getElementsByTagName('circle')[3].setAttribute('cy', `${event.clientY/8 -3.8}`)
+   document.getElementById('points').getElementsByTagName('path')[1].setAttribute('d', `M10 20 ${event.clientX/8 - 6} ${event.clientY/8 -3.8}`);
+   document.getElementById('points').getElementsByTagName('path')[2].setAttribute('d', `M10 10 C20 10 ${event.clientX/8 - 6} ${event.clientY/8 -3.8} 10 20`);
+   document.getElementById('points').getElementsByTagName('text')[3].outerHTML = `<text x="${event.clientX/8 - 6}" y="${event.clientY/8 -5}" fill="red">${X}, ${Y}</text>`;  
+   }  
+});
+
+document.getElementById('svg-frame').addEventListener('mouseup', event => {
+console.log(event.clientX);
+down=false; 
+});
+
+</script>
 
 </body>
 </html>
