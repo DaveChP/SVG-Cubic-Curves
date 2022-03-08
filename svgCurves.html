@@ -115,7 +115,7 @@ canvas.addEventListener('mousemove', event => {
    circles[nodeNumber].setAttribute('cy', `${Y}`)   
    paths[lineNumber].setAttribute('d', lineDefinition(lineNumber) );
    paths[2].setAttribute('d', curveDefinition());
-   labels[nodeNumber].outerHTML = `<text x="${X}" y="${Y-1}" fill="red">${parseInt(X)}, ${parseInt(Y)}</text>`; 
+   labels[nodeNumber].outerHTML = `<text x="${X}" y="${Y-1}" text-anchor="middle" fill="red">${parseInt(X)}, ${parseInt(Y)}</text>`; 
    document.getElementById('definition-report').outerHTML = displayDefinition(); 
    }  
 });
