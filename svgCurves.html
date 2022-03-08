@@ -86,37 +86,37 @@ window.onload = function() {
 
 let down=false;
 const canvas = document.getElementById('svg-frame');
+Points = [{x:10, y:10}, {x:20, y:10}, {x:20, y:20}, {x:10, y:20}];
 let nodeNumber = -1;
 let lineNumber = -1; 
 
 canvas.addEventListener('mousedown', event => {
   if (event.target.tagName == 'circle') {
-  nodeNumber = (event.target.tagName == 'circle') ? parseInt(event.target.dataset.node) : -1;
+  nodeNumber = parseInt(event.target.dataset.node);
   lineNumber = (nodeNumber < 2) ? 0 : 1;
   down=true; 
   } // end if circle targetted;
 });
 
-Points = [{x:10, y:10}, {x:20, y:10}, {x:20, y:20}, {x:10, y:20}];
 canvas.addEventListener('mousemove', event => {
    if (down) {
    X = parseInt(event.clientX/8 - 6);
    Y = parseInt(event.clientY/8 -3.8);
-   document.getElementById('points').getElementsByTagName('circle')[nodeNumber].setAttribute('cx', `${event.clientX/8 - 6}`);
-   document.getElementById('points').getElementsByTagName('circle')[nodeNumber].setAttribute('cy', `${event.clientY/8 -3.8}`)
+   let circles = document.getElementById('points').getElementsByTagName('circle');
+   let paths = document.getElementById('points').getElementsByTagName('path');
+   let labels = document.getElementById('points').getElementsByTagName('text');
+
    Points[nodeNumber] = {x:event.clientX/8 - 6, y:event.clientY/8 -3.8};
-   
-   document.getElementById('points').getElementsByTagName('path')[lineNumber].setAttribute('d', lineDefinition(lineNumber) );
 
-   document.getElementById('points').getElementsByTagName('path')[2].setAttribute('d', curveDefinition());
-
-
-   document.getElementById('points').getElementsByTagName('text')[nodeNumber].outerHTML = `<text x="${event.clientX/8 - 6}" y="${event.clientY/8 -5}" fill="red">${X}, ${Y}</text>`;  
+   circles[nodeNumber].setAttribute('cx', `${event.clientX/8 - 6}`);
+   circles[nodeNumber].setAttribute('cy', `${event.clientY/8 -3.8}`)   
+   paths[lineNumber].setAttribute('d', lineDefinition(lineNumber) );
+   paths[2].setAttribute('d', curveDefinition());
+   labels[nodeNumber].outerHTML = `<text x="${event.clientX/8 - 6}" y="${event.clientY/8 -5}" fill="red">${X}, ${Y}</text>`;  
    }  
 });
 
 canvas.addEventListener('mouseup', event => {
-console.log(event.clientX);
 down=false;
 nodeNumber = -1;
 lineNumber = -1; 
