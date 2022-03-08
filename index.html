@@ -2,24 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>SVG Curves</title>
+<title>SVG Cubic Curve Path</title>
 
 <style>
 body {
   font-family: sans-serif;
-  padding: 0px;
-  margin: 0;
+  display: flex;
+  justify-content: center;
 }
 svg {
-  position: absolute;
-  left: 50px;
-  top: 30px;
+position: flex;
+/* margin-left: 50px;*/
+/* margin-top: 30px;*/
   background-color: #ffffff;
 }
-#svg-frame {
-  border: 0;
+#page-container {
+  position:relative;
+  border: 1px solid red;
   padding: 0;
-  margin: 0;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 </style>
@@ -28,12 +31,13 @@ svg {
 
 <body>
 
-<div id="svg-frame">
+<div id="page-container">
+<h1>SVG Cubic Curve Path</h1>
 <svg version="1.1" width="800" height="400" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
 
   <g id="grid" fill="none" stroke="black" stroke-width="0.05">
   <path id="vertical-grid" d="M0.1 0 v50 m10 0 v-50 m10 0 v50 m10 0 v-50 m10 0 v50 m10 0 v-50 m10 0 v50 m10 0 v-50 m10 0 v50 m10 0 v-50 m9.8 0 v50"/>
-  <path id="horizontal-grid"d="M0 0.1 h100 m0 10 h-100 m0 10 h100 m0 10 h-100 m0 10 h100 m0 9.8 h-100"/>
+  <path id="horizontal-grid" d="M0 0.1 h100 m0 10 h-100 m0 10 h100 m0 10 h-100 m0 10 h100 m0 9.8 h-100"/>
   </g>
 
   <g id="axis-labels" font-size="2" fill="black">
@@ -72,14 +76,9 @@ svg {
   <text x="20" y="19" fill="red" text-anchor="middle">20, 20</text>
   <circle data-node="3" cx="10" cy="20" r="0.5"/>
   <text x="10" y="19" fill="red" text-anchor="middle">10,20</text>
-  <rect x="20" y="47" width="50" height="2.5" fill="white"></rect>
+  <rect x="20" y="47" width="50" height="2.5" fill="white" />
   <text id="definition-report" text-anchor="left" x="20" y="49" fill="green">green path definition: d="M10 10 C20 10 20 20 10 20"</text>
   </g>
-
-<!--
-<path  stroke="#000000" stroke-width="1" fill="none" d="M300 100 C400 120, 500 300, 200 200" />
--->
-
 </svg>
 </div>
 <script>
@@ -88,10 +87,13 @@ window.onload = function() {
 // all functionality wrapped here to fire onload;
 
 let down=false;
-const canvas = document.getElementById('svg-frame');
-Points = [{x:10, y:10}, {x:20, y:10}, {x:20, y:20}, {x:10, y:20}];
+const canvas = document.getElementsByTagName('svg')[0]; 
+const circles = document.getElementById('points').getElementsByTagName('circle');
+const paths = document.getElementById('points').getElementsByTagName('path');
+const labels = document.getElementById('points').getElementsByTagName('text');
 let nodeNumber = -1;
-let lineNumber = -1; 
+let lineNumber = -1;
+Points = [{x:10, y:10}, {x:20, y:10}, {x:20, y:20}, {x:10, y:20}];
 
 canvas.addEventListener('mousedown', event => {
   if (event.target.tagName == 'circle') {
@@ -103,13 +105,12 @@ canvas.addEventListener('mousedown', event => {
 
 canvas.addEventListener('mousemove', event => {
    if (down) {
-   X = event.clientX/8 - 6;
-   Y = event.clientY/8 -3.8;
-   let circles = document.getElementById('points').getElementsByTagName('circle');
-   let paths = document.getElementById('points').getElementsByTagName('path');
-   let labels = document.getElementById('points').getElementsByTagName('text');
+   canvasLeftBorder = canvas.getBoundingClientRect().left;
+   canvasRightBorder = canvas.getBoundingClientRect().top;
+   X = (event.clientX-canvasLeftBorder)/8; // - 6;
+   Y = (event.clientY-canvasRightBorder)/8; // -3.8;
 
-   Points[nodeNumber] = {x:event.clientX/8 - 6, y:event.clientY/8 -3.8};
+   Points[nodeNumber] = {x:X, y:Y};
 
    circles[nodeNumber].setAttribute('cx', `${X}`);
    circles[nodeNumber].setAttribute('cy', `${Y}`)   
@@ -128,7 +129,7 @@ lineNumber = -1;
 
 function lineDefinition (lineNumber) {
 return `M${Points[lineNumber*2].x} ${Points[lineNumber*2].y} ${Points[lineNumber*2+1].x} ${Points[lineNumber*2+1].y}`;
-} // end handles redraw;
+}
 
 function curveDefinition () {
    return`M${Points[0].x} ${Points[0].y} C${Points[1].x} ${Points[1].y} ${Points[2].x} ${Points[2].y} ${Points[3].x} ${Points[3].y}`;}
