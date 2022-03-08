@@ -60,16 +60,16 @@ svg {
   </g>
   
   <g id="points" fill="blue" stroke="none" font-size="2" text-anchor="middle">
-  <path d="M10 10 h10" stroke="red" stroke-width="0.2"/>
+  <path data-node="" d="M10 10 h10" stroke="red" stroke-width="0.2"/>
   <path d="M10 20 20 20" stroke="red" stroke-width="0.2"/>
   <path stroke="green" stroke-width="0.2" d="M10 10 C20 10 20 20 10 20" fill="none"/>
-  <circle cx="10" cy="10" r="0.5"/>
+  <circle data-node="0" cx="10" cy="10" r="0.5"/>
   <text x="10" y="9" fill="red">10,10</text>
-  <circle cx="20" cy="10" r="0.5"/>
+  <circle data-node="1" cx="20" cy="10" r="0.5"/>
   <text x="20" y="9" fill="red">20,10</text>
-  <circle id="handle" cx="20" cy="20" r="0.5"/>
+  <circle data-node="2" id="handle" cx="20" cy="20" r="0.5"/>
   <text x="20" y="19" fill="red">20, 20</text>
-  <circle cx="10" cy="20" r="0.5"/>
+  <circle data-node="3" cx="10" cy="20" r="0.5"/>
   <text x="10" y="19" fill="red">10,20</text>
   </g>
 
@@ -81,29 +81,52 @@ svg {
 </div>
 <script>
 let down=false;
+const canvas = document.getElementById('svg-frame');
+let nodeNumber = -1;
+let lineNumber = -1; 
 
-document.getElementById('svg-frame').addEventListener('mousedown', event => {
+canvas.addEventListener('mousedown', event => {
 console.log(event.target.parentElement.id);
+console.log(event.target.tagName);
+nodeNumber = (event.target.tagName == 'circle') ? parseInt(event.target.dataset.node) : -1;
+lineNumber = (nodeNumber < 2) ? 0 : 1;
+console.log(nodeNumber);
+console.log(lineNumber);
 down=true; 
-//outerHTML = `<circle id="handle" cx="${event.clientX*8 + 50}" cy="${event.clientY*8 + 30}" r="0.5"/>`
 });
 
-document.getElementById('svg-frame').addEventListener('mousemove', event => {
+Points = [{x:10, y:10}, {x:20, y:10}, {x:20, y:20}, {x:10, y:20}];
+canvas.addEventListener('mousemove', event => {
    if (down) {
    X = parseInt(event.clientX/8 - 6);
    Y = parseInt(event.clientY/8 -3.8);
-   document.getElementById('points').getElementsByTagName('circle')[2].setAttribute('cx', `${event.clientX/8 - 6}`);
-   document.getElementById('points').getElementsByTagName('circle')[2].setAttribute('cy', `${event.clientY/8 -3.8}`)
-   document.getElementById('points').getElementsByTagName('path')[1].setAttribute('d', `M10 20 ${event.clientX/8 - 6} ${event.clientY/8 -3.8}`);
-   document.getElementById('points').getElementsByTagName('path')[2].setAttribute('d', `M10 10 C20 10 ${event.clientX/8 - 6} ${event.clientY/8 -3.8} 10 20`);
-   document.getElementById('points').getElementsByTagName('text')[2].outerHTML = `<text x="${event.clientX/8 - 6}" y="${event.clientY/8 -5}" fill="red">${X}, ${Y}</text>`;  
+   document.getElementById('points').getElementsByTagName('circle')[nodeNumber].setAttribute('cx', `${event.clientX/8 - 6}`);
+   document.getElementById('points').getElementsByTagName('circle')[nodeNumber].setAttribute('cy', `${event.clientY/8 -3.8}`)
+   Points[nodeNumber] = {x:event.clientX/8 - 6, y:event.clientY/8 -3.8};
+   
+   document.getElementById('points').getElementsByTagName('path')[lineNumber].setAttribute('d', modifyHandles(lineNumber) );
+
+   modifyCurve();
+
+   document.getElementById('points').getElementsByTagName('text')[nodeNumber].outerHTML = `<text x="${event.clientX/8 - 6}" y="${event.clientY/8 -5}" fill="red">${X}, ${Y}</text>`;  
    }  
 });
 
-document.getElementById('svg-frame').addEventListener('mouseup', event => {
+canvas.addEventListener('mouseup', event => {
 console.log(event.clientX);
-down=false; 
+down=false;
+nodeNumber = -1;
+lineNumber = -1; 
 });
+
+function modifyHandles (lineNumber) {
+return `M${Points[lineNumber*2].x} ${Points[lineNumber*2].y} ${Points[lineNumber*2+1].x} ${Points[lineNumber*2+1].y}`;
+} // end handles redraw;
+
+function modifyCurve () {
+   document.getElementById('points').getElementsByTagName('path')[2].setAttribute('d', `M${Points[0].x} ${Points[0].y} C${Points[1].x} ${Points[1].y} ${Points[2].x} ${Points[2].y} ${Points[3].x} ${Points[3].y}`);
+}
+
 
 </script>
 
