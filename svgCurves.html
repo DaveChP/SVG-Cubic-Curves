@@ -80,6 +80,10 @@ svg {
 </svg>
 </div>
 <script>
+
+window.onload = function() {
+// all functionality wrapped here and fire onload event;
+
 let down=false;
 const canvas = document.getElementById('svg-frame');
 let nodeNumber = -1;
@@ -124,6 +128,8 @@ return `M${Points[lineNumber*2].x} ${Points[lineNumber*2].y} ${Points[lineNumber
 
 function curveDefinition () {
    return`M${Points[0].x} ${Points[0].y} C${Points[1].x} ${Points[1].y} ${Points[2].x} ${Points[2].y} ${Points[3].x} ${Points[3].y}`;}
+
+} // end onload function;
 
 
 </script>
