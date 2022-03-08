@@ -86,13 +86,11 @@ let nodeNumber = -1;
 let lineNumber = -1; 
 
 canvas.addEventListener('mousedown', event => {
-console.log(event.target.parentElement.id);
-console.log(event.target.tagName);
-nodeNumber = (event.target.tagName == 'circle') ? parseInt(event.target.dataset.node) : -1;
-lineNumber = (nodeNumber < 2) ? 0 : 1;
-console.log(nodeNumber);
-console.log(lineNumber);
-down=true; 
+  if (event.target.tagName == 'circle') {
+  nodeNumber = (event.target.tagName == 'circle') ? parseInt(event.target.dataset.node) : -1;
+  lineNumber = (nodeNumber < 2) ? 0 : 1;
+  down=true; 
+  } // end if circle targetted;
 });
 
 Points = [{x:10, y:10}, {x:20, y:10}, {x:20, y:20}, {x:10, y:20}];
