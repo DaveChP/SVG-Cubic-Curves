@@ -9,20 +9,62 @@ body {
   font-family: sans-serif;
   display: flex;
   justify-content: center;
+  color: #454545;
+  font-weight: 300;
+  margin-top: 4em;
 }
 svg {
 position: flex;
 /* margin-left: 50px;*/
 /* margin-top: 30px;*/
+/* margin-bottom: 2em;*/
   background-color: #ffffff;
 }
 #page-container {
   position:relative;
-  border: 1px solid red;
+  width: 800px;
+  /*border: 1px solid red;*/
   padding: 0;
   display: inline-block;
   margin-left: auto;
   margin-right: auto;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 2em;
+}
+h2 {
+  font-size: 20px;
+  font-weight: 400;
+  margin-top: 2em;
+}
+p {
+  line-height: 1.4em;
+}
+img {
+  width: 100%;
+  margin-bottom: 2em;
+}
+figurecaption {
+  font-size: 0.9em;
+  font-weight: 600;
+  margin-left: 2em;
+}
+ul {
+  list-style-type: number;
+}
+li:not(:last-child) {
+    margin-bottom: 0.5em;
+}
+.footer {
+  /*position: fixed;*/
+  left: 0;
+  bottom: 0;
+  min-height: 10em;
+  width: 100%;
+  /*background-color: red;*/
 }
 
 </style>
@@ -33,6 +75,7 @@ position: flex;
 
 <div id="page-container">
 <h1>SVG Cubic Curve Path</h1>
+<p>Drag the blue node points on the interactive svg canvas below to see how the path definition for this cubic curve path changes.</p>
 <svg version="1.1" width="800" height="400" viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
 
   <g id="grid" fill="none" stroke="black" stroke-width="0.05">
@@ -80,7 +123,32 @@ position: flex;
   <text id="definition-report" text-anchor="left" x="20" y="49" fill="green">green path definition: d="M10 10 C20 10 20 20 10 20"</text>
   </g>
 </svg>
+<h2>Paths and Curves</h2>
+<p>A path tag in svg results in a line being drawn. Path tags include attributes to set the line colour and width and a single definition attribute containing a list of instruction that define the line. The path definition is a linear stream of letter-character action values, each followed by numerical values that specify a point on the canvas.</p>
+
+<figure>
+<img src="cubic_curve_definition.png" alt="The anatomy of a cubic curve path definition"/>
+<figurecaption><em>Figure:</em> Image showing a cubic path definition (d) and the points to which each value correspond</figurecaption>
+</figure>
+
+<h2>Notes</h2>
+<ul>
+  <li>Numerical values in path definitions are <i>user units</i>, not pixels etc.</li>
+  <li>The example shown uses absolute coordinate references (upper-case commands)</li>
+  <li>Relative coordinates would be specified with lower-case command letters</li>
+  <li>The <b>M</b> command character defines the starting position for <i>any</i> following command</li>
+  <li>In this definition, the next command character <b>C</b> specifies that a <b>C</b>ubic curve follows</li>
+  <li>Cubic curve definitions include two gradient points (these are not usually visible)</li>
+  <li>The first gradient point determines the curvature from the preceding point</li>
+  <li>The second gradient point determines the curvature to the following point</li>
+</ul>
+
+<h2>Further Information</h2>
+<p>Comprehensive information of SVG <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths" target="_blank">paths</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#curve_commands" target="_blank">cubic curve</a> definitions is available at the <a href="https://developer.mozilla.org/" target="_blank">Mozilla developer web site</a></p>
+
+<div class="footer"></div>
 </div>
+
 <script>
 
 window.onload = function() {
@@ -97,6 +165,8 @@ Points = [{x:10, y:10}, {x:20, y:10}, {x:20, y:20}, {x:10, y:20}];
 
 canvas.addEventListener('mousedown', event => {
   if (event.target.tagName == 'circle') {
+  canvasLeftBorder = canvas.getBoundingClientRect().left; // global, needed in mousemove event;
+  canvasRightBorder = canvas.getBoundingClientRect().top; // global;
   nodeNumber = parseInt(event.target.dataset.node);
   lineNumber = (nodeNumber < 2) ? 0 : 1;
   down=true; 
@@ -105,10 +175,8 @@ canvas.addEventListener('mousedown', event => {
 
 canvas.addEventListener('mousemove', event => {
    if (down) {
-   canvasLeftBorder = canvas.getBoundingClientRect().left;
-   canvasRightBorder = canvas.getBoundingClientRect().top;
-   X = (event.clientX-canvasLeftBorder)/8; // - 6;
-   Y = (event.clientY-canvasRightBorder)/8; // -3.8;
+   X = (event.clientX-canvasLeftBorder)/8;
+   Y = (event.clientY-canvasRightBorder)/8;
 
    Points[nodeNumber] = {x:X, y:Y};
 
